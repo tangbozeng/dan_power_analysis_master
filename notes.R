@@ -26,5 +26,26 @@ extra_data <- readr::read_csv("raw/Mo_CMcm_reads_counts.csv",skip = 1,
                                        CM_3 = readr::col_integer()
                                       )
                               )
-#let me compare with the previous one. what is skip?
+#let me compare with the previous one. what is skip? need to find out later.
 extra_data
+counts <- dplyr::left_join(counts, extra_data, by = "gene_id") # again, combine it by adding from letf join.
+summary(counts) # Some hilariously high max count values, haha, ofcs, that is the total reads number.
+
+# It reshape the counts matrix into a combined data.frame.
+counts_long <- counts %>% 
+  reshape2::melt(id.vars = "gene_id", value.name = "count", variable.name=c("sample") )
+
+# this is the plotting method. 
+counts_long %>%
+  ggplot2::ggplot() +
+  ggplot2::aes(count) +
+  ggplot2::geom_density() +
+  ggplot2::facet_wrap( . ~ sample)
+# make plot to have a look of the distribution.what if we try something else?
+counts_long %>%
+  ggplot2::ggplot() +
+  ggplot2::aes(count) +
+  ggplot2::geom_density() +
+  ggplot2::facet_wrap( . ~ sample) +
+  ggplot2::scale_x_log10() # add log10.
+
