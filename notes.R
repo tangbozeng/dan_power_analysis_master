@@ -34,6 +34,7 @@ summary(counts) # Some hilariously high max count values, haha, ofcs, that is th
 # It reshape the counts matrix into a combined data.frame.
 counts_long <- counts %>% 
   reshape2::melt(id.vars = "gene_id", value.name = "count", variable.name=c("sample") )
+# need to find out what is resharpe2
 
 # this is the plotting method. 
 counts_long %>%
@@ -48,4 +49,10 @@ counts_long %>%
   ggplot2::geom_density() +
   ggplot2::facet_wrap( . ~ sample) +
   ggplot2::scale_x_log10() # add log10.
+m <- counts[,2:ncol(counts)]
+mxs <- apply(m, MARGIN=c(2), max)
+which(m == mxs, arr.ind = TRUE) # he asked whether high count genes same or not?
+#
+##      row col
+
 
